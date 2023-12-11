@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>US Fish & Wildlife Hatcheries</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.0/dist/leaflet.css"/>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
+	
+
+    <style>
+ 	html, body, #map { width: 100%; height: 100%; margin: 0; background: #fff; }
+		body {
+			margin: 0;
+			padding: 0;
+			background: "whitesmoke";
+			font-family: "Noto Sans", sans-serif;
+			color: #3d3d3d;
+		}
+
+		h1 {
+			position: absolute;
+			margin-top: 0;
+			top: 10px;
+			left: 45px;
+			font-size: 2em;
+			font-family: "Times New Roman", serif;
+			letter-spacing: .04em;
+			padding: 10px 15px;
+			background: rgba(256, 256, 256);
+			border: 1px solid rgb(20, 28, 188);
+			border-radius: 3px;
+			z-index: 800;
+		}
+
+		h2 {
+			font-family: "Times New Roman", serif;
+			letter-spacing: .04em;
+		}
+
+		#map {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			width: 100%;
+		}
+
+		section {
+			position: absolute;
+			bottom: 0;
+			left: 10px;
+			width: 280px;
+			margin: 20px auto;
+			padding: 0 15px;
+			background: rgba(256, 256, 256);
+			border: 3px solid rgb(21, 0, 255);
+			border-radius: 3px;
+			z-index: 800;
+		}
+
+		p {
+			font-size: .9em;
+			line-height: 1.5em;
+		}
+
+		a {
+			color: #005daa;
+			text-decoration: none;
+		}
+
+		a:hover {
+			text-decoration: underline;
+		}
+	
+		p {
+  font-size: 14px;
+}
+    </style>
+
+    <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
+	<script src="https://unpkg.com/leaflet@1.7.0/dist/leaflet.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.4/chroma.min.js"></script>	
+
+</head>
+
+
+
+<body>
+
+	<h1 onmouseover="style.color='blue'" onmouseout="style.color='black'">US Fish and Wildlife Hatcheries 
+		<img src="Seal.jpg" alt="Seal" width="80" height="100">
+ </h1>
+
+
+<section>
+	<h2> Why Hatcheries Matter </h2> 
+	<p> The world's rivers and lakes were once full of diverse communities of fish, 
+		invertebrates, and plants.  Now, these aquatic wildlife are now some of the most imperiled 
+		in the world because of habitat loss and fragmentation, invasive species , and climate change . 
+		National fish hatcheries can help by raising aquatic wildlife that are at-at risk, threatened or 
+		endangered, improving recreational fishing, and supporting fisheries that have been impacted by a federal dam. 
+	</p>
+
+<a href="https://www.fws.gov/story/national-fish-hatchery-system-supports-aquatic-conservation">Interested in learning more?</a>
+<p class="author">Map authored by Mary Walton</p>
+<p> Data Collected From <a href="https://hub.arcgis.com/datasets/321ad67064684fdebad5918476125ab9_0/explore"> ArcGIS hub</a></p>
+
+
+<button onclick="myFunction()">Click For More!</button>
+
+<p id="demo"></p>
+
+
+</section>
+
+
+
+<!-- Our web map and content will go here -->
+<div id="map"></div>
+
+<!-- this is the line of code that represents the fish symbol that is supposed to replace the default blue points-->
+<i class="fa-solid fa-fish"> </i>
+<script>
+
+    // 1. Create a map object.
+var mymap = L.map('map', {
+    center: [41.4626364, -110.4956113], 
+    zoom: 4, //this line adjusts the starting zoom level of the map
+});
+ 
+// 2. Add a base map.
+L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(mymap);
+
+// add data
+hatcheries = L.geoJson.ajax("assets/hatcheries.geojson");
+
+hatcheries.addTo(mymap);
+
+	
+//need to add attribution (credits in bottom right corner)
+
+ "Map Produced by Mary Walton"
+
+//Change default symbol to fish symbol
+//I placed the line of code outside of the script tags (on line 116) because when I added it in the tags it created an error that made my entire map disappear
+
+//Enable Popups 
+var myMarker = L.geoJSON(info, {
+        filter: function (feature) {
+          if (feature.geometry.type == "Point") {
+            return feature;
+          }
+        },
+        onEachFeature: function (feature, layer) {
+          layer.bindPopup(Hatchery)
+        },
+      }).addTo(map);
+
+//Legend (I was not able to get this to work so I added this button feature instead)
+
+function myFunction() {
+  document.getElementById("demo").innerHTML = "Participation in outdoor activities like  fishing, helps connect people with nature and empower the next generation of conservationists. Fishing is more than a hobby. For many, it represents a way of life and a sustainable way to feed communities. Through fishing, people can connect with nature and the world around them.";
+}
+
+</script>
+</body>
+</html>
